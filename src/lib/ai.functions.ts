@@ -25,7 +25,7 @@ async function callAI(messages: Array<{ role: string; content: string }>, tools?
 
 function solvePrompt(title: string, category: string, severity: string, description: string) {
   return `You are a senior security and crisis-response advisor.
-A user has reported the following real-life problem. Produce a concise, actionable plan to address it.
+A user reported this real-life problem. Give ONLY the core solution — no preamble, no headings, no analysis.
 
 Title: ${title}
 Category: ${category}
@@ -33,12 +33,7 @@ Severity: ${severity}
 Description:
 ${description}
 
-Respond in markdown with these sections:
-1. **Immediate actions** (next 1 hour)
-2. **Short-term plan** (next 24-72 hours)
-3. **Root-cause analysis**
-4. **Risks & escalation triggers**
-Keep it practical and specific.`;
+Respond with 3-5 short bullet points (one line each) covering the most important actions to take right now. Keep the entire reply under 80 words. No markdown headers, no sections.`;
 }
 
 async function classifyAndSolve(title: string, category: string, description: string) {
