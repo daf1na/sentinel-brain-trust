@@ -98,11 +98,14 @@ export const createReportWithAI = createServerFn({ method: "POST" })
         title: z.string().min(1).max(200),
         description: z.string().min(10).max(4000),
         category: z.string().min(1).max(50),
+        severity: z.enum(["auto", ...SEVERITIES]).default("auto"),
       })
       .parse(input),
   )
   .handler(async ({ data, context }) => {
-    const { severity, solution } = await classifyAndSolve(data.title, data.category, data.description);
+    const ai = await classifyAndSolve(data.title, data.category, data.description);
+    const severity = data.severity === "auto" ? ai.severity : data.severity;
+    const solution = ai.solution;
 
     const { data: row, error } = await context.supabase
       .from("reports")
