@@ -28,6 +28,7 @@ function ReportPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("general");
+  const [severity, setSeverity] = useState<"auto" | "low" | "medium" | "high" | "critical">("auto");
   const [submitting, setSubmitting] = useState(false);
   const create = useServerFn(createReportWithAI);
 
@@ -40,9 +41,11 @@ function ReportPage() {
     setSubmitting(true);
     try {
       const res = await create({
-        data: { title: title.trim(), description: description.trim(), category },
+        data: { title: title.trim(), description: description.trim(), category, severity },
       });
-      toast.success(`Report submitted. AI severity: ${res.severity}`);
+      toast.success(
+        severity === "auto" ? `Report submitted. AI severity: ${res.severity}` : "Report submitted.",
+      );
       navigate({ to: "/dashboard" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to submit");
