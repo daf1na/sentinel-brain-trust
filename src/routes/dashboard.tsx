@@ -1,11 +1,23 @@
 import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { FileText, Plus } from "lucide-react";
+import { FileText, Plus, Download, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { StatusBadge, SeverityBadge } from "@/components/report-badges";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type Report = {
   id: string;
@@ -38,6 +50,38 @@ function DashboardPage() {
 
   if (loading) return null;
   if (!user) return <Navigate to="/login" />;
+
+  function saveReport(r: Report) {
+    const text = `SecureMind Report
+=================
+
+Title:       ${r.title}
+Category:    ${r.category}
+Severity:    ${r.severity}
+Status:      ${r.status}
+Submitted:   ${new Date(r.created_at).toLocaleString()}
+
+Description
+-----------
+${r.description}
+
+${r.ai_solution ? `AI Solution\n-----------\n${r.ai_solution}\n` : ""}`;
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `report-${r.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40) || "untitled"}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Report saved to your device");
+  }
+
+  async function deleteReport(id: string) {
+    const { error } = await supabase.from("reports").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    setReports((prev) => prev?.filter((r) => r.id !== id) ?? null);
+    toast.success("Report deleted");
+  }
 
   return (
     <div className="min-h-screen">
@@ -78,10 +122,34 @@ function DashboardPage() {
               <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">{r.description}</p>
               {r.ai_solution && (
                 <div className="mt-4 rounded-lg border border-primary/30 bg-primary/5 p-4 text-sm">
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary-glow">Admin response</p>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary-glow">AI solution</p>
                   <p className="whitespace-pre-wrap text-foreground/90">{r.ai_solution}</p>
                 </div>
               )}
+              <div className="mt-4 flex justify-end gap-2">
+                <Button size="sm" variant="outline" onClick={() => saveReport(r)}>
+                  <Download className="mr-2 h-4 w-4" /> Save
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button size="sm" variant="destructive">
+                      <Trash2 className="mr-2 h-4 w-4" /> Delete
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete this report?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This permanently removes "{r.title}" and its AI solution. This cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => deleteReport(r.id)}>Delete</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             </div>
           ))}
         </div>

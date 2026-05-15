@@ -1,0 +1,1 @@
+CREATE POLICY "Users delete own reports" ON public.reports FOR DELETE TO authenticated USING (auth.uid() = user_id);
