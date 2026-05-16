@@ -40,27 +40,27 @@ function Index() {
       <main className="mx-auto max-w-6xl px-6">
         {/* Hero */}
         <section className="relative pt-24 pb-32 text-center">
-          <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs text-muted-foreground backdrop-blur">
-            <Sparkles className="h-3.5 w-3.5 text-primary-glow" />
+          <div className="animate-fade-up mx-auto inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs text-muted-foreground backdrop-blur" style={{ animationDelay: "0ms" }}>
+            <Sparkles className="h-3.5 w-3.5 text-primary-glow animate-float" />
             AI-assisted incident response
           </div>
-          <h1 className="mt-6 font-display text-5xl font-semibold leading-tight md:text-7xl">
+          <h1 className="animate-fade-up mt-6 font-display text-5xl font-semibold leading-tight md:text-7xl" style={{ animationDelay: "100ms" }}>
             Report any problem.
             <br />
-            <span className="text-gradient">Only the admin sees it.</span>
+            <span className="text-gradient animate-gradient-shift bg-gradient-primary bg-clip-text">Only the admin sees it.</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
+          <p className="animate-fade-up mx-auto mt-6 max-w-2xl text-lg text-muted-foreground" style={{ animationDelay: "200ms" }}>
             SecureMind is a private channel for real-life security and safety issues. You
             describe what happened — our AI triages it instantly and drafts a clear
             solution for the admin.
           </p>
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
-            <Button size="lg" asChild className="bg-gradient-primary shadow-glow">
+          <div className="animate-fade-up mt-10 flex flex-wrap justify-center gap-3" style={{ animationDelay: "300ms" }}>
+            <Button size="lg" asChild className="bg-gradient-primary shadow-glow animate-glow-pulse transition-transform hover:scale-105">
               <Link to="/signup">
                 Submit a report <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
+            <Button size="lg" variant="outline" asChild className="transition-transform hover:scale-105">
               <Link to="/login">I already have an account</Link>
             </Button>
           </div>
@@ -72,8 +72,12 @@ function Index() {
               { value: "100%", label: "Private to admin" },
               { value: "4", label: "Severity levels" },
               { value: "24/7", label: "Available" },
-            ].map((s) => (
-              <div key={s.label} className="rounded-xl border border-border bg-card/40 p-4 backdrop-blur">
+            ].map((s, i) => (
+              <div
+                key={s.label}
+                className="animate-fade-up hover-lift rounded-xl border border-border bg-card/40 p-4 backdrop-blur"
+                style={{ animationDelay: `${400 + i * 80}ms` }}
+              >
                 <div className="font-display text-2xl font-semibold text-gradient">{s.value}</div>
                 <div className="mt-1 text-xs text-muted-foreground">{s.label}</div>
               </div>
