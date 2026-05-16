@@ -192,8 +192,12 @@ function Index() {
               { icon: AlertTriangle, title: "Physical safety", body: "Hazards, injuries, unsafe conditions." },
               { icon: Users, title: "Harassment", body: "Workplace or community concerns." },
               { icon: Globe, title: "Other", body: "Anything else that needs attention." },
-            ].map((u) => (
-              <div key={u.title} className="rounded-xl border border-border bg-card/40 p-5">
+            ].map((u, i) => (
+              <div
+                key={u.title}
+                className="animate-fade-up hover-lift rounded-xl border border-border bg-card/40 p-5"
+                style={{ animationDelay: `${i * 80}ms` }}
+              >
                 <u.icon className="h-5 w-5 text-primary-glow" />
                 <div className="mt-3 font-display font-semibold">{u.title}</div>
                 <p className="mt-1 text-sm text-muted-foreground">{u.body}</p>
