@@ -161,10 +161,11 @@ function Index() {
                 title: "Admin resolves",
                 body: "The admin reviews, updates status, and closes the loop — you stay informed.",
               },
-            ].map((s) => (
+            ].map((s, i) => (
               <div
                 key={s.step}
-                className="relative rounded-2xl border border-border bg-gradient-card p-6 shadow-elegant"
+                className="animate-fade-up hover-lift relative rounded-2xl border border-border bg-gradient-card p-6 shadow-elegant"
+                style={{ animationDelay: `${i * 120}ms` }}
               >
                 <div className="absolute right-4 top-4 font-mono text-xs text-muted-foreground">
                   {s.step}
