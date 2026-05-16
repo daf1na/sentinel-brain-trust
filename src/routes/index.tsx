@@ -229,8 +229,12 @@ function Index() {
                 q: "Is it free?",
                 a: "Yes — SecureMind is free to use for individuals and small teams.",
               },
-            ].map((f) => (
-              <div key={f.q} className="rounded-xl border border-border bg-card/40 p-5">
+            ].map((f, i) => (
+              <div
+                key={f.q}
+                className="animate-fade-up hover-lift rounded-xl border border-border bg-card/40 p-5"
+                style={{ animationDelay: `${i * 80}ms` }}
+              >
                 <div className="font-display font-semibold">{f.q}</div>
                 <p className="mt-2 text-sm text-muted-foreground">{f.a}</p>
               </div>
