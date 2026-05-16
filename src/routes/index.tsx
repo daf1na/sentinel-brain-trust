@@ -118,12 +118,13 @@ function Index() {
               title: "Admin oversight",
               body: "A dedicated admin view triages every incoming report and updates status in one place.",
             },
-          ].map((f) => (
+          ].map((f, i) => (
             <div
               key={f.title}
-              className="rounded-2xl border border-border bg-gradient-card p-6 shadow-elegant transition hover:border-primary/40"
+              className="animate-fade-up hover-lift rounded-2xl border border-border bg-gradient-card p-6 shadow-elegant hover:border-primary/40"
+              style={{ animationDelay: `${i * 80}ms` }}
             >
-              <div className="mb-4 grid h-10 w-10 place-items-center rounded-lg bg-primary/15 text-primary-glow">
+              <div className="mb-4 grid h-10 w-10 place-items-center rounded-lg bg-primary/15 text-primary-glow transition-transform duration-300 group-hover:scale-110">
                 <f.icon className="h-5 w-5" />
               </div>
               <h3 className="font-display text-lg font-semibold">{f.title}</h3>
